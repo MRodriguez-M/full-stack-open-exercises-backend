@@ -56,10 +56,25 @@ app.get('/info', (request, response) => {
 
 app.post('/api/persons', (request, response) => {
   const contact = request.body;
+
+  if(!contact.name || !contact.number) {
+    return response.status(400).json({
+      error: 'name and/or number missing'
+    })
+  }
+
   const person = {
     name: contact.name,
     number: contact.number,
     id: Math.floor(Math.random() * 1001)
+  }
+
+  for(let i = 0; i < persons.length; i++) {
+    if(person.name === persons[i].name) {
+      return response.status(400).json({
+        error: 'name already exists'
+      })
+    }
   }
 
   persons = persons.concat(person);
