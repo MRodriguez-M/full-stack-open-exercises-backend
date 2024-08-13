@@ -3,8 +3,11 @@ const app = express();
 const PORT = 3001;
 const morgan = require('morgan');
 
+morgan.token('data', (req, res) => {
+  return JSON.stringify(req.body);
+});
 app.use(express.json());
-app.use(morgan('tiny'));
+app.use(morgan(':method :url :status :res[content-length] - :response-time ms :data'));
 
 let persons = [
     { 
