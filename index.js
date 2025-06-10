@@ -6,7 +6,7 @@ const PORT = process.env.PORT;
 const morgan = require('morgan');
 const Contact = require('./models/contact');
 
-switch (true) {
+/*switch (true) {
   case (process.argv.length < 3):
     console.log('Missing password as argument')
     process.exit(1)
@@ -22,7 +22,7 @@ switch (true) {
 
 const password = process.argv[2]
 
-/*if (process.argv.length === 3) {
+if (process.argv.length === 3) {
   Contact.find({}).then(result => {
   console.log('phonebook:')
   result.forEach(contact => {
@@ -42,6 +42,7 @@ else if (process.argv.length === 5) {
     mongoose.connection.close()
   })
 }*/
+
 morgan.token('data', (req, res) => {
   return JSON.stringify(req.body);
 });
@@ -102,31 +103,30 @@ app.get('/info', (request, response) => {
 })
 
 app.post('/api/persons', (request, response) => {
-  const contact = request.body;
+  const body = request.body;
 
-  if(!contact.name || !contact.number) {
+  if(!body.name || !body.number) {
     return response.status(400).json({
       error: 'name and/or number missing'
     })
   }
 
-  const person = {
-    name: contact.name,
-    number: contact.number,
-    id: Math.floor(Math.random() * 1001)
-  }
+  const contact = new Contact({
+    name: body.name,
+    number: body.number,
+  })
 
-  for(let i = 0; i < persons.length; i++) {
+  /*for(let i = 0; i < persons.length; i++) {
     if(person.name === persons[i].name) {
       return response.status(400).json({
         error: 'name already exists'
       })
     }
-  }
+  }*/
 
-  persons = persons.concat(person);
-
-  response.json(person)
+  contact.save().then(savedContact => {
+    response.json(savedContact)
+  })
 })
 
 app.listen(PORT, () => {
