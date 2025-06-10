@@ -90,12 +90,12 @@ app.get ('/api/persons/:id', (request, response) => {
     }
 })
 
-app.delete('/api/persons/:id', (request, response) => {
+app.delete('/api/persons/:id', (request, response, next) => {
     Contact.findByIdAndDelete(request.params.id)
       .then(result => {
         response.status(204).end()
       })
-      .catch(error => console.log(error))
+      .catch(error => next(error))
 })
 
 app.get('/info', (request, response) => {
@@ -129,6 +129,18 @@ app.post('/api/persons', (request, response) => {
     response.json(savedContact)
   })
 })
+
+const errorHandler = (error, request, response, next) => {
+  console.error(error.message)
+
+  if (error.name === 'CastError') {
+    return response.status(400).send({ error: 'malformatted id' })
+  } 
+
+  next(error)
+}
+
+app.use(errorHandler)
 
 app.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`);
