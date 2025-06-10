@@ -1,9 +1,47 @@
+require('dotenv').config()
 const express = require('express');
 const app = express();
 app.use(express.static('dist'))
-const PORT = process.env.PORT || 3001;
+const PORT = process.env.PORT;
 const morgan = require('morgan');
+const Contact = require('./models/contact');
 
+switch (true) {
+  case (process.argv.length < 3):
+    console.log('Missing password as argument')
+    process.exit(1)
+  case (process.argv.length === 4):
+    console.log('Missing argument')
+    process.exit(1)
+  case (process.argv.length > 5):
+    console.log('Too many arguments')
+    process.exit(1)
+  default:
+    break
+}
+
+const password = process.argv[2]
+
+/*if (process.argv.length === 3) {
+  Contact.find({}).then(result => {
+  console.log('phonebook:')
+  result.forEach(contact => {
+    console.log(contact.name, contact.number)
+  })
+  mongoose.connection.close()
+  })
+}
+else if (process.argv.length === 5) {
+  const contact = new Contact({
+  name: process.argv[3],
+  number: process.argv[4],
+  })
+
+  contact.save().then(result => {
+    console.log(`added ${process.argv[3]} number ${process.argv[4]} to phonebook`)
+    mongoose.connection.close()
+  })
+}*/
 morgan.token('data', (req, res) => {
   return JSON.stringify(req.body);
 });
@@ -34,7 +72,9 @@ let persons = [
 ]
 
 app.get('/api/persons', (request, response) => {
-    response.json(persons);
+    Contact.find({}).then(contacts => {
+    response.json(contacts)
+  })
 })
 
 app.get ('/api/persons/:id', (request, response) => {
