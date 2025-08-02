@@ -130,6 +130,25 @@ app.post('/api/persons', (request, response) => {
   })
 })
 
+app.put('/api/persons/:id', (request, response, next) => {
+  const body = request.body
+
+  Contact.findById(request.params.id)
+    .then(result => {
+      if (!result) {
+        return response.status(404).end()
+      }
+
+      result.name = body.name;
+      result.number = body.number;
+
+      return result.save().then((updatedContact) => {
+        response.json(updatedContact)
+      })
+    })
+    .catch(error => next(error))
+})
+
 const errorHandler = (error, request, response, next) => {
   console.error(error.message)
 
