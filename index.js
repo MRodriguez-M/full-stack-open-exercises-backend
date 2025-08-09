@@ -79,15 +79,16 @@ app.get('/api/persons', (request, response) => {
 })
 
 app.get ('/api/persons/:id', (request, response) => {
-    const contactId = request.params.id;
-    const person = persons.find(person => person.id === contactId);
-
-    if(person) {
-        response.json(person)
-    }
-    else {
-        response.status(404).end()
-    }
+    Contact.findById(request.params.id)
+      .then(contact => {
+        if (contact) {
+          response.json(contact)
+        }
+        else {
+          response.status(404).end()
+        }
+      })
+      .catch(error => next(error))
 })
 
 app.delete('/api/persons/:id', (request, response, next) => {
@@ -100,7 +101,11 @@ app.delete('/api/persons/:id', (request, response, next) => {
 
 app.get('/info', (request, response) => {
     let requestDate = new Date();
-    response.send(`Phonebook has info for ${persons.length} people <br> ${requestDate}`)
+
+    Contact.countDocuments({})
+      .then(count => {
+        response.send(`Phonebook has info for ${count} people <br> ${requestDate}`)
+      })
 })
 
 app.post('/api/persons', (request, response) => {
