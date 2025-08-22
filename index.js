@@ -108,7 +108,7 @@ app.get('/info', (request, response) => {
       })
 })
 
-app.post('/api/persons', (request, response) => {
+app.post('/api/persons', (request, response, next) => {
   const body = request.body;
 
   if(!body.name || !body.number) {
@@ -130,9 +130,11 @@ app.post('/api/persons', (request, response) => {
     }
   }*/
 
-  contact.save().then(savedContact => {
-    response.json(savedContact)
-  })
+  contact.save()
+    .then(savedContact => {
+      response.json(savedContact)
+    })
+    .catch(error => next(error))
 })
 
 app.put('/api/persons/:id', (request, response, next) => {
