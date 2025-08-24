@@ -4,14 +4,17 @@ switch (true) {
   case (process.argv.length < 3):
     console.log('Missing password as argument')
     process.exit(1)
+    break;
   case (process.argv.length === 4):
     console.log('Missing argument')
     process.exit(1)
+    break;
   case (process.argv.length > 5):
     console.log('Too many arguments')
     process.exit(1)
+    break;
   default:
-    break
+    break;
 }
 
 const password = process.argv[2]
@@ -44,7 +47,7 @@ else if (process.argv.length === 5) {
   number: process.argv[4],
   })
 
-  contact.save().then(result => {
+  contact.save().then(() => {
     console.log(`added ${process.argv[3]} number ${process.argv[4]} to phonebook`)
     mongoose.connection.close()
   })
