@@ -65,3 +65,74 @@ describe('total likes', () => {
     assert.strictEqual(result, 23);
   })
 })
+
+describe('favorite blog', () => {
+  test('of empty list is none', () => {
+    const emptyBlog = [];
+
+    const result = listHelper.favoriteBlog(emptyBlog);
+    assert.deepStrictEqual(result, {});
+  })
+
+  test('when list has only one blog it equals that', () => {
+    const oneBlog = [
+      {
+      _id: '5a422aa71b54a676234d17f8',
+      title: 'Go To Statement Considered Harmful',
+      author: 'Edsger W. Dijkstra',
+      url: 'https://homepages.cwi.nl/~storm/teaching/reader/Dijkstra68.pdf',
+      likes: 5,
+      __v: 0
+      }
+    ];
+
+    const result = listHelper.favoriteBlog(oneBlog);
+    assert.deepStrictEqual(result, {
+      _id: '5a422aa71b54a676234d17f8',
+      title: 'Go To Statement Considered Harmful',
+      author: 'Edsger W. Dijkstra',
+      url: 'https://homepages.cwi.nl/~storm/teaching/reader/Dijkstra68.pdf',
+      likes: 5,
+      __v: 0
+    });
+  })
+
+  test('of a bigger list is one with most likes', () => {
+    const multipleBlogs = [
+      {
+      _id: '5a422aa71b54a676234d17f8',
+      title: 'Go To Statement Considered Harmful',
+      author: 'Edsger W. Dijkstra',
+      url: 'https://homepages.cwi.nl/~storm/teaching/reader/Dijkstra68.pdf',
+      likes: 5,
+      __v: 0
+      },
+      {
+      _id: '5a422aa71b54a676234d17f9',
+      title: 'Test Blog',
+      author: 'Sarah Manning',
+      url: 'https://www.google.com',
+      likes: 8,
+      __v: 0
+      },
+      {
+      _id: '5a422aa71b54a676234d17f7',
+      title: 'Blog Title',
+      author: 'Allison Hendrix',
+      url: 'https://www.wikipedia.org',
+      likes: 10,
+      __v: 0
+      }
+    ];
+
+    const result = listHelper.favoriteBlog(multipleBlogs);
+    assert.deepStrictEqual(result, {
+      _id: '5a422aa71b54a676234d17f7',
+      title: 'Blog Title',
+      author: 'Allison Hendrix',
+      url: 'https://www.wikipedia.org',
+      likes: 10,
+      __v: 0
+    });
+  })
+})
