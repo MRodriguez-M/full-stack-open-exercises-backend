@@ -60,9 +60,43 @@ const mostBlogs = (blogs) => {
   return mostBlogs;
 }
 
+
+const mostLikes = (blogs) => {
+  if (blogs.length === 0) {
+    return {};
+  }
+
+  let mostLikes = {author: "", likes: 0};
+  let likesCount = [{author: blogs[0].author, blogs: blogs[0].likes}];
+
+  if (blogs.length === 1) {
+    mostLikes.author = blogs[0].author;
+    mostLikes.likes = blogs[0].likes;
+  } else {
+    for (let i = 1; i < blogs.length; i++) {
+      const authorExists = likesCount.find(blog => blog.author === blogs[i].author);
+
+      if (authorExists) {
+        authorExists.likes += blogs[i].likes;
+      } else {
+        likesCount.push({author: blogs[i].author, likes: blogs[i].likes});
+      }
+    }
+  }
+
+  for (const author of likesCount) {
+    if(author.likes > mostLikes.likes) {
+      mostLikes = author;
+    }
+  }
+  
+  return mostLikes;
+}
+
 module.exports = {
   dummy,
   totalLikes,
   favoriteBlog,
   mostBlogs,
+  mostLikes,
 }

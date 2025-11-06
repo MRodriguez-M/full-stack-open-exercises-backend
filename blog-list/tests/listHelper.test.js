@@ -207,3 +207,74 @@ describe('most blogs', () => {
     });
   })
 })
+
+describe('most likes', () => {
+  test('of empty list is none', () => {
+    const emptyBlog = [];
+
+    const result = listHelper.mostLikes(emptyBlog);
+    assert.deepStrictEqual(result, {});
+  })
+
+  test('when list has only one blog it equals that author and total', () => {
+    const oneBlog = [
+      {
+      _id: '5a422aa71b54a676234d17f8',
+      title: 'Go To Statement Considered Harmful',
+      author: 'Edsger W. Dijkstra',
+      url: 'https://homepages.cwi.nl/~storm/teaching/reader/Dijkstra68.pdf',
+      likes: 5,
+      __v: 0
+      }
+    ];
+
+    const result = listHelper.mostLikes(oneBlog);
+    assert.deepStrictEqual(result, {
+      author: 'Edsger W. Dijkstra',
+      likes: 5,
+    });
+  })
+
+  test('of a bigger list is one with most entries', () => {
+    const multipleBlogs = [
+      {
+      _id: '5a422aa71b54a676234d17f8',
+      title: 'Go To Statement Considered Harmful',
+      author: 'Edsger W. Dijkstra',
+      url: 'https://homepages.cwi.nl/~storm/teaching/reader/Dijkstra68.pdf',
+      likes: 5,
+      __v: 0
+      },
+      {
+      _id: '5a422aa71b54a676234d17f9',
+      title: 'Test Blog',
+      author: 'Sarah Manning',
+      url: 'https://www.google.com',
+      likes: 8,
+      __v: 0
+      },
+      {
+      _id: '5a422aa71b54a676234d17f7',
+      title: 'Blog Title',
+      author: 'Allison Hendrix',
+      url: 'https://www.wikipedia.org',
+      likes: 10,
+      __v: 0
+      },
+      {
+      _id: '5a422aa71b54a676234d17f7',
+      title: 'Second Blog',
+      author: 'Sarah Manning',
+      url: 'https://www.youtube.com',
+      likes: 6,
+      __v: 0
+      }
+    ];
+
+    const result = listHelper.mostLikes(multipleBlogs);
+    assert.deepStrictEqual(result, {
+      author: 'Sarah Manning',
+      likes: 14,
+    });
+  })
+})
